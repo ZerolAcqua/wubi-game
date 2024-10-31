@@ -1,77 +1,71 @@
-<template>
-  <div>
-    <el-row
+<template lang="pug">
+  div
+
+    //- 根据大小屏幕显示不同的 gutter
+    el-row(
       :class="{ zigen: gameModel == 'zigen' }"
       class="box"
-      :gutter="20"
+      :gutter= 15
       style="margin-top: 50px"
-    >
-      <el-col :span="4" :offset="2">
-        <el-card
+    )
+      el-col(:xs="3" :sm="3" :md="2" :lg="2" :xl="2")
+      el-col(:xs="6" :sm="6" :md="4" :lg="4" :xl="4")
+        el-card(
           shadow="always"
-          v-bind:class="isRight ? 'boderNormal' : 'boderError'"
-        >
-          {{ d1[1] }}
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          {{ d2[1] }}
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          {{ d3[1] }}
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          {{ d4[1] }}
-        </el-card>
-      </el-col>
-      <el-col :span="4">
-        <el-card shadow="always">
-          {{ d5[1] }}
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row style="text-align: center; margin-top: 50px">
-      <el-input
-        v-model="intext"
-        id="intext"
-        placeholder="光标置于此处开始"
-        @input="game($event)"
-        autofocus="autofocus"
-        style="width: 150px"
-      ></el-input>
-    </el-row>
-    <el-row style="margin: 50px 0 20px 0">
-      <b><span>统计信息：</span></b
-      ><span
-        >当前速度：<el-tag>{{ typeSpeed }}</el-tag> 字/分钟；</span
-      ><span>
-        正确率：<el-tag>{{ rightPercent }}%</el-tag>；
-      </span>
-      <el-button @click="reset">重置</el-button>
-    </el-row>
-    <el-collapse value="1">
-      <el-collapse-item title="字根图" name="1">
-        <div class="rootImg"><img src="../assets/root.png" /></div>
-      </el-collapse-item>
-      <el-collapse-item title="一级简码" name="2">
-        <el-table style="width: 100%" :data="tableData">
-          <el-table-column prop="t1" label="横区"></el-table-column>
-          <el-table-column prop="t2" label="竖区"></el-table-column>
-          <el-table-column prop="t3" label="撇区"></el-table-column>
-          <el-table-column prop="t4" label="捺区"></el-table-column>
-          <el-table-column prop="t5" label="折区"></el-table-column>
-        </el-table>
-      </el-collapse-item>
-      <el-collapse-item title="二级简码" name="3">
-        <div class="rootImg"><img src="../assets/86erjijianma.gif" /></div>
-      </el-collapse-item>
-    </el-collapse>
-  </div>
+          :class="isRight ? 'boderNormal' : 'boderError'"
+        )
+          | {{ d1[1] }}
+      el-col(:xs="6" :sm="6" :md="4" :lg="4" :xl="4")
+        el-card(shadow="always")
+          | {{ d2[1] }}
+      el-col(:xs="6" :sm="6" :md="4" :lg="4" :xl="4")
+        el-card(shadow="always")
+          | {{ d3[1] }}
+      el-col.hidden-sm-and-down(:span="4" )
+        el-card(shadow="always")
+          | {{ d4[1] }}
+      el-col.hidden-sm-and-down(:span="4" )
+        el-card(shadow="always")
+          | {{ d5[1] }}
+      el-col(:xs="6" :sm="3" :md="2" :lg="2" :xl="2")
+
+    el-row(style="margin-top: 50px")
+      el-col(:span="24" style="text-align: center")
+        el-input(
+          v-model="intext"
+          id="intext"
+          placeholder="光标置于此处开始"
+          @input="game($event)"
+          autofocus="autofocus"
+          style="width: 150px"
+        )
+
+
+    el-row(style="margin: 50px 0 20px 0; align-items : center")
+      span
+        b 统计信息：
+        | 当前速度：
+        el-tag {{ typeSpeed }}
+        | &nbsp; 字/分钟；
+        | 正确率：
+        el-tag {{ rightPercent }}%
+        | ；
+      el-button(@click="reset") 重置
+
+    el-collapse(value="1")
+      el-collapse-item(title="字根图" name="1")
+        .rootImg
+          img(src="../assets/root.png")
+      el-collapse-item(title="一级简码" name="2")
+        el-table(style="width: 100%" :data="tableData")
+          el-table-column(prop="t1" label="横区")
+          el-table-column(prop="t2" label="竖区")
+          el-table-column(prop="t3" label="撇区")
+          el-table-column(prop="t4" label="捺区")
+          el-table-column(prop="t5" label="折区")
+      el-collapse-item(title="二级简码" name="3")
+        .rootImg
+          img(src="../assets/86erjijianma.gif")
 </template>
 
 <style scoped>
@@ -86,12 +80,26 @@
 .zigen {
   font-family: HanZiRootFont;
 }
-.box {
-  font-size: 1cm;
-  text-align: center;
+
+/* xs 以上 */
+@media screen {
+  .box {
+    font-size: 1cm;
+    text-align: center;
+    line-height: 45px;
+  }
 }
-.el-card__body {
-  padding: 20px 0px;
+/* xs 以下 */
+@media screen and (max-width: 300px) {
+  .box {
+    font-size: 0.6cm;
+    text-align: center;
+    line-height: 15px;
+  }
+}
+
+.el-card {
+  --el-card-padding: 20px 5px;
 }
 
 .boderNormal {
@@ -109,6 +117,8 @@
 </style>
 
 <script lang="ts">
+import 'element-plus/theme-chalk/display.css'
+
 const list = {
   g: ['一', '丁', '丅', '丄', '丂', '七'],
   f: ['丐', '丑', '专', '丒', '丕', '丘', '丙', '世', '丗', '且'],
@@ -349,9 +359,9 @@ export default {
       this.d5 = ''
       this.getData()
       this.reset()
-      if (val == 'erji') {
-        this.$message('当前是二级简码模式，请更换为五笔输入法练习')
-      }
+      // if (val == 'erji') {
+      //   this.$message('当前是二级简码模式，请更换为五笔输入法练习')
+      // }
       document.getElementById('intext').focus()
     },
   },
