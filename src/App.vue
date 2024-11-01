@@ -27,7 +27,7 @@
                 style="color: #f56c6c; text-decoration: none"
                 target="_blank"
               )
-                b 五笔7天速成
+                b 五笔七天速成 @岩兔站
 
     el-main
       el-row
@@ -39,7 +39,7 @@
         )
           Game(:gameModel="this.gameModel")
 
-    el-footer(style="text-align: center")
+    el-footer(style="text-align: center ")
       | &copy; {{ new Date().getFullYear() }}
       | Zerol Acqua
       //- 换行
@@ -53,7 +53,7 @@
 
 <style scoped>
 .el-container {
-  height: 100%;
+  min-height: 100vh;
 }
 
 .el-menu.el-menu--horizontal.el-menu {

@@ -1,39 +1,45 @@
-# wubi-game
+# 五笔练习游戏
 
-This template should help get you started developing with Vue 3 in Vite.
+由原仓库 https://github.com/yhf7952/WubiGame/ 修改而来，请支持原作者。
 
-## Recommended IDE Setup
+## 原作者的五笔教程
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[五笔七天速成](https://wubi.yantuz.cn/)
 
-## Type Support for `.vue` Imports in TS
+## 改动说明
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- 升级为 vue3，并使用相应的 element-plus 组件库
+- 修改字体文件中部分错误的字根
+- 修改二级简码中部分错误（86 版二级简码不同来源存在差异。我纠正了原码表中明显的错误，经过比对换用了个人觉得最靠谱的码表）
 
-## Customize configuration
+  - 缺失“采”、“秋”
+  - “锣“应为”甸”
+  - “赫”应为“赤”
+  - “成（dm）”应为“面”
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 使用方法
 
-## Project Setup
+### 源码运行
+
+运行环境：node v20.18.0
 
 ```sh
+# 安装依赖
 npm install
+# 启动项目
+npm dev
+# 发布项目
+npm build
 ```
 
-### Compile and Hot-Reload for Development
+### 下载发布版本
 
-```sh
-npm run dev
-```
+到 [release](https://github.com/yhf7952/WubiGame/releases) 页面下载最新版本，解压后在浏览器中打开 `index.html`，或部署至其他 web 服务器。
 
-### Type-Check, Compile and Minify for Production
+### 在线使用
 
-```sh
-npm run build
-```
+地址： https://wubigame.yantuz.cn/
 
-### Lint with [ESLint](https://eslint.org/)
+## 关注原作者
 
-```sh
-npm run lint
-```
+网站： https://yantuz.cn
