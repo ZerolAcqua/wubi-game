@@ -37,7 +37,10 @@
           :md="{ span: 18, offset: 3 }"
           :xl="{ span: 12, offset: 6 }"
         )
-          Game(:gameModel="this.gameModel")
+          Game(:gameMode)
+          //- Statistic
+          CheatSheetComponent
+
 
     el-footer(style="text-align: center ")
       | &copy; {{ new Date().getFullYear() }}
@@ -52,16 +55,6 @@
 </template>
 
 <style scoped>
-.el-container {
-  min-height: 100vh;
-}
-
-.el-menu.el-menu--horizontal.el-menu {
-  border-bottom: 0;
-}
-</style>
-
-<style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -69,6 +62,10 @@
   text-align: center;
   color: #2c3e50;
   min-width: 230px;
+}
+
+.el-container {
+  min-height: 100vh;
 }
 
 .el-header {
@@ -87,52 +84,41 @@
   --el-menu-hover-bg-color: #2c3035;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+.el-menu.el-menu--horizontal {
+  border-bottom: 0;
 }
 </style>
 
-<script lang="ts">
-import Game from './components/GameComponent.vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
 import { Document } from '@element-plus/icons-vue'
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      activeIndex: '1',
-      gameModel: 'zigen',
-      windowWidth: 640,
-    }
-  },
-  components: {
-    Game,
-    Document,
-  },
-  methods: {
-    handleSelect(key) {
-      //console.log(key);
-      switch (key) {
-        case '1':
-          this.gameModel = 'zigen'
-          break
-        case '2':
-          this.gameModel = 'yiji'
-          break
-        case '3':
-          this.gameModel = 'erji'
-          break
-      }
-    },
-  },
-  mounted() {
-    window.onresize = () => {
-      return (() => {
-        this.windowWidth = document.body.clientWidth
-      })()
-    }
-  },
+import Game from './components/GameComponent.vue'
+import Statistic from './components/StatisticComponent.vue'
+import CheatSheetComponent from './components/CheatSheetComponent.vue'
+
+const activeIndex = ref('1')
+const gameMode = ref('zigen')
+const windowWidth = ref(640)
+
+const handleSelect = (key: string) => {
+  switch (key) {
+    case '1':
+      gameMode.value = 'zigen'
+      break
+    case '2':
+      gameMode.value = 'yiji'
+      break
+    case '3':
+      gameMode.value = 'erji'
+      break
+  }
 }
+
+onMounted(() => {
+  window.onresize = () => {
+    windowWidth.value = document.body.clientWidth
+  }
+})
 </script>

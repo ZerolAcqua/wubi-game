@@ -1,9 +1,8 @@
 <template lang="pug">
   div
-
     //- 根据大小屏幕显示不同的 gutter
     el-row(
-      :class="{ zigen: gameModel == 'zigen' }"
+      :class="{ zigen: gameMode == 'zigen' }"
       class="box"
       :gutter= 15
       style="margin-top: 50px"
@@ -50,22 +49,8 @@
         | 正确率：
         el-tag {{ rightPercent }}%
         | ；
-      el-button(@click="reset") 重置
+      el-button(@click="resetStatistic") 重置
 
-    el-collapse(value="1")
-      el-collapse-item(title="字根图" name="1")
-        .rootImg
-          img(src="../assets/root.png")
-      el-collapse-item(title="一级简码" name="2")
-        el-table(style="width: 100%" :data="tableData")
-          el-table-column(prop="t1" label="横区")
-          el-table-column(prop="t2" label="竖区")
-          el-table-column(prop="t3" label="撇区")
-          el-table-column(prop="t4" label="捺区")
-          el-table-column(prop="t5" label="折区")
-      el-collapse-item(title="二级简码" name="3")
-        .rootImg
-          img(src="../assets/86erjijianma.png")
 </template>
 
 <style scoped>
@@ -108,15 +93,9 @@
 .boderError {
   border: 2px solid #f56c6c;
 }
-.rootImg {
-  text-align: center;
-}
-.rootImg img {
-  max-width: 100%;
-}
 </style>
 
-<script lang="ts">
+<script setup lang="ts">
 import 'element-plus/theme-chalk/display.css'
 
 // prettier-ignore
@@ -205,171 +184,131 @@ const strErRaw =
 
 // 先去掉空格和|，再分割成数组
 const strEr = strErRaw.replace(/[\s\|]/g, '')
-// console.log(strEr)
 const listEr = strEr.split('')
 
-//console.log(getRandom());
+import { ref, computed, watch, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 
-export default {
-  data() {
-    return {
-      d1: '',
-      d2: '',
-      d3: '',
-      d4: '',
-      d5: '',
-      intext: '',
-      isRight: true,
-      errorTimes: 0,
-      errorSumTimes: 0,
-      rightTimes: 0,
-      lastRightDate: new Date(),
-      tableData: [
-        {
-          t1: 'G（一）',
-          t2: 'H（上）',
-          t3: 'T（和）',
-          t4: 'Y（主）',
-          t5: 'N（民）',
-        },
-        {
-          t1: 'F（地）',
-          t2: 'J（是）',
-          t3: 'R（的）',
-          t4: 'U（产）',
-          t5: 'B（了）',
-        },
-        {
-          t1: 'D（在）',
-          t2: 'K（中）',
-          t3: 'E（有）',
-          t4: 'I（不）',
-          t5: 'V（发）',
-        },
-        {
-          t1: 'S（要）',
-          t2: 'L（国）',
-          t3: 'W（人）',
-          t4: 'O（为）',
-          t5: 'C（以）',
-        },
-        {
-          t1: 'A（工）',
-          t2: 'M（同）',
-          t3: 'Q（我）',
-          t4: 'P（这）',
-          t5: 'X（经）',
-        },
-      ],
+const d1 = ref('')
+const d2 = ref('')
+const d3 = ref('')
+const d4 = ref('')
+const d5 = ref('')
+const intext = ref('')
+const isRight = ref(true)
+const errorTimes = ref(0)
+const errorSumTimes = ref(0)
+const rightTimes = ref(0)
+const lastRightDate = ref(new Date())
+
+const props = defineProps<{
+  gameMode: string
+}>()
+
+const typeSpeed = computed(() => {
+  const time = new Date() - lastRightDate.value
+  return Math.floor((60000 / time) * rightTimes.value) || 0
+})
+
+const rightPercent = computed(() => {
+  return rightTimes.value === 0
+    ? 100
+    : (
+        (rightTimes.value / (rightTimes.value + errorSumTimes.value)) *
+        100
+      ).toFixed(2)
+})
+
+watch(
+  () => props.gameMode,
+  val => {
+    d1.value = ''
+    d2.value = ''
+    d3.value = ''
+    d4.value = ''
+    d5.value = ''
+    getData()
+
+    resetStatistic()
+    if (val === 'erji') {
+      ElMessage('当前是二级简码模式，请更换为五笔输入法练习')
     }
+    document.getElementById('intext').focus()
   },
-  props: {
-    gameModel: String,
-  },
-  computed: {
-    //计算打字速度
-    typeSpeed() {
-      const time = new Date() - this.lastRightDate
-      return Math.floor((60000 / time) * this.rightTimes) || 0
-    },
-    //正确率
-    rightPercent() {
-      return this.rightTimes == 0
-        ? 100
-        : (
-            (this.rightTimes / (this.rightTimes + this.errorSumTimes)) *
-            100
-          ).toFixed(2)
-    },
-  },
-  watch: {
-    gameModel(val) {
-      this.d1 = ''
-      this.d2 = ''
-      this.d3 = ''
-      this.d4 = ''
-      this.d5 = ''
-      this.getData()
-      this.reset()
-      if (val == 'erji') {
-        this.$message('当前是二级简码模式，请更换为五笔输入法练习')
-      }
-      document.getElementById('intext').focus()
-    },
-  },
-  methods: {
-    //初始化
-    getData() {
-      this.d1 = this.d2 == '' ? this.getRandom() : this.d2
-      this.d2 = this.d3 == '' ? this.getRandom() : this.d3
-      this.d3 = this.d4 == '' ? this.getRandom() : this.d4
-      this.d4 = this.d5 == '' ? this.getRandom() : this.d5
-      this.d5 = this.getRandom()
-    },
-    //开始游戏
-    game($event) {
-      const input = $event.toLowerCase()
-      if (this.gameModel == 'erji') {
-        if (input == this.d1[1]) {
-          this.getData()
-          this.rightTimes++
-          this.isRight = true
-        } else {
-          this.isRight = false
-          this.errorSumTimes++
-        }
-        this.intext = ''
-        return
-      }
+)
 
-      if (input == this.d1[0]) {
-        //输入正确
-        this.getData()
-        this.errorTimes = 0
-        this.isRight = true
-        this.rightTimes++
-      } else {
-        this.isRight = false
-        this.errorTimes++
-        this.errorSumTimes++
-        if (this.errorTimes >= 3) {
-          this.$message.error('错了哦，正确答案是：' + this.d1[0].toUpperCase())
-        }
-      }
-      this.intext = ''
-    },
-    reset() {
-      this.rightTimes = 0
-      this.errorSumTimes = 0
-      this.lastRightDate = new Date()
-      this.isRight = true
-      document.getElementById('intext').focus()
-    },
-    getRandom() {
-      let thisList = list
-      switch (this.gameModel) {
-        case 'zigen':
-          thisList = list
-          break
-        case 'yiji':
-          thisList = listYi
-          break
-        case 'erji':
-          return ['', listEr[Math.floor(Math.random() * listEr.length)]]
-      }
-
-      const returnVal = {}
-      const keyList = Object.keys(thisList)
-      const key = keyList[Math.floor(Math.random() * keyList.length)]
-      const values = thisList[key]
-      const value = values[Math.floor(Math.random() * values.length)]
-      returnVal[key] = value
-      return [key, value]
-    },
-  },
-  //初始化方法
-  created: function () {
-    this.getData()
-  },
+const getData = () => {
+  d1.value = d2.value === '' ? getRandom() : d2.value
+  d2.value = d3.value === '' ? getRandom() : d3.value
+  d3.value = d4.value === '' ? getRandom() : d4.value
+  d4.value = d5.value === '' ? getRandom() : d5.value
+  d5.value = getRandom()
 }
+
+const game = $event => {
+  const input = $event.toLowerCase()
+  if (props.gameMode === 'erji') {
+    if (input === d1.value[1]) {
+      getData()
+      rightTimes.value++
+      isRight.value = true
+    } else {
+      isRight.value = false
+      errorSumTimes.value++
+    }
+    intext.value = ''
+    return
+  }
+
+  if (input === d1.value[0]) {
+    getData()
+    errorTimes.value = 0
+    isRight.value = true
+    rightTimes.value++
+  } else {
+    isRight.value = false
+    errorTimes.value++
+    errorSumTimes.value++
+    if (errorTimes.value >= 3) {
+      ElMessage({
+        message: `错了哦，正确答案是：${d1.value[0].toUpperCase()}`,
+        grouping: true,
+        type: 'error',
+      })
+    }
+  }
+  intext.value = ''
+}
+
+const resetStatistic = () => {
+  rightTimes.value = 0
+  errorSumTimes.value = 0
+  lastRightDate.value = new Date()
+  isRight.value = true
+  document.getElementById('intext').focus()
+}
+
+const getRandom = () => {
+  let thisList = list
+  switch (props.gameMode) {
+    case 'zigen':
+      thisList = list
+      break
+    case 'yiji':
+      thisList = listYi
+      break
+    case 'erji':
+      return ['', listEr[Math.floor(Math.random() * listEr.length)]]
+  }
+
+  const keyList = Object.keys(thisList)
+  const key = keyList[Math.floor(Math.random() * keyList.length)]
+  const values = thisList[key]
+  const value = values[Math.floor(Math.random() * values.length)]
+  return [key, value]
+}
+
+onMounted(() => {
+  getData()
+})
 </script>
