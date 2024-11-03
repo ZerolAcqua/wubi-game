@@ -4,7 +4,7 @@
     el-collapse(value="1")
       el-collapse-item(title="字根图" name="1")
         .rootImg
-          img(src="../assets/root.png")
+          img(src="@/assets/root.png")
       el-collapse-item(title="一级简码" name="2")
         el-table(style="width: 100%" :data="tableData")
           el-table-column(prop="t1" label="横区")
@@ -14,7 +14,7 @@
           el-table-column(prop="t5" label="折区")
       el-collapse-item(title="二级简码" name="3")
         .rootImg
-          img(src="../assets/86erjijianma.png")
+          img(src="@/assets/86erjijianma.png")
 </template>
 
 <style scoped>

@@ -9,7 +9,7 @@
           :md="{ span: 18, offset: 3 }"
           :xl="{ span: 12, offset: 6 }"
         )
-          h1(style="margin: 0 20px; float: left; line-height: 60px") 五笔练习
+          h1.main-title(style="margin: 0 20px; float: left; line-height: 60px") 五笔练习
           el-menu(
             :default-active="activeIndex"
             mode="horizontal"
@@ -21,10 +21,10 @@
             el-menu-item(index="3") 二级简码
             el-menu-item(index="4")
               el-icon.no-inherit
-                Document(color="#f56c6c")
+                Document(color="var(--el-color-primary)")
               a(
                 href="https://wubi.yantuz.cn"
-                style="color: #f56c6c; text-decoration: none"
+                style="color: var(--el-color-primary); text-decoration: none"
                 target="_blank"
               )
                 b 五笔七天速成 @岩兔站
@@ -38,8 +38,22 @@
           :xl="{ span: 12, offset: 6 }"
         )
           Game(:gameMode)
-          //- Statistic
-          CheatSheetComponent
+      el-row(style="margin-top: 50px")
+        el-col(
+          :xs="24"
+          :sm="{ span: 20, offset: 2 }"
+          :md="{ span: 18, offset: 3 }"
+          :xl="{ span: 12, offset: 6 }"
+        )
+          Stat
+      el-row(style="margin-top: 50px")
+        el-col(
+          :xs="24"
+          :sm="{ span: 20, offset: 2 }"
+          :md="{ span: 18, offset: 3 }"
+          :xl="{ span: 12, offset: 6 }"
+        )
+          CheatSheet
 
 
     el-footer(style="text-align: center ")
@@ -64,24 +78,26 @@
   min-width: 230px;
 }
 
+.main-title {
+  color: var(--el-color-primary);
+}
+
 .el-container {
   min-height: 100vh;
 }
 
 .el-header {
-  background: #545c64;
-  /* height: 80px; */
-  color: '#fff';
+  background: var(--el-color-primary-light-7);
   float: left;
 }
 
 .el-menu {
-  --el-menu-border-color: #545c64;
-  --el-menu-text-color: #fff;
-  --el-menu-active-color: #ffd04b;
-  --el-menu-hover-text-color: #fff;
-  --el-menu-bg-color: #545c64;
-  --el-menu-hover-bg-color: #2c3035;
+  --el-menu-border-color: var(--el-color-primary-text);
+  --el-menu-text-color: var(--el-text-color-primary);
+  --el-menu-active-color: var(--el-color-primary-dark-2);
+  --el-menu-hover-text-color: var(-el-color-primary);
+  --el-menu-bg-color: var(--el-color-primary-light-7);
+  --el-menu-hover-bg-color: var(--el-color-primary-light-5);
 }
 
 .el-menu.el-menu--horizontal {
@@ -94,24 +110,26 @@ import { ref, onMounted } from 'vue'
 
 import { Document } from '@element-plus/icons-vue'
 
-import Game from './components/GameComponent.vue'
-import Statistic from './components/StatisticComponent.vue'
-import CheatSheetComponent from './components/CheatSheetComponent.vue'
+import Game from '@/components/GameComponent.vue'
+import Stat from '@/components/StatComponent.vue'
+import CheatSheet from '@/components/CheatSheetComponent.vue'
+
+import { GameMode } from './interface'
 
 const activeIndex = ref('1')
-const gameMode = ref('zigen')
+const gameMode = ref(GameMode.zigen)
 const windowWidth = ref(640)
 
 const handleSelect = (key: string) => {
   switch (key) {
     case '1':
-      gameMode.value = 'zigen'
+      gameMode.value = GameMode.zigen
       break
     case '2':
-      gameMode.value = 'yiji'
+      gameMode.value = GameMode.yiji
       break
     case '3':
-      gameMode.value = 'erji'
+      gameMode.value = GameMode.erji
       break
   }
 }
