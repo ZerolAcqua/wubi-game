@@ -34,7 +34,7 @@
           v-model="intext"
           id="intext"
           placeholder="光标置于此处开始"
-          @input="onInput(str)"
+          @input="onInput"
           autofocus="autofocus"
           style="width: 150px"
         )
@@ -156,7 +156,7 @@ function onInput(str: string) {
         retryTimes.value++
         if (retryTimes.value >= 3) {
           ElMessage({
-            message: `错了哦，正确答案是：${d1.value[0].toUpperCase()}`,
+            message: `错了哦，正确答案是：${d1.value![0].toUpperCase()}`,
             grouping: true,
             type: 'error',
           })
@@ -216,7 +216,5 @@ function getRandom(): [string, string] {
   return [key, value]
 }
 
-onMounted(() => {
-  getData()
-})
+getData()
 </script>
