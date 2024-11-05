@@ -38,6 +38,30 @@
 
 </template>
 
+<style scoped>
+:global(h2#card-usage ~ .example .example-showcase) {
+  background-color: var(--el-fill-color) !important;
+}
+
+.el-statistic {
+  --el-statistic-content-font-size: 28px;
+  --el-statistic-title-font-size: 14px;
+}
+
+.statistic-card {
+  padding: 20px;
+  border-radius: 4px;
+  background-color: var(--el-color-primary-light-9);
+}
+
+.statistic-button {
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  border-radius: 4px;
+}
+</style>
+
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { store } from '@/store'
@@ -81,27 +105,3 @@ onMounted(() => {
   }, 1000)
 })
 </script>
-
-<style scoped>
-:global(h2#card-usage ~ .example .example-showcase) {
-  background-color: var(--el-fill-color) !important;
-}
-
-.el-statistic {
-  --el-statistic-content-font-size: 28px;
-  --el-statistic-title-font-size: 14px;
-}
-
-.statistic-card {
-  padding: 20px;
-  border-radius: 4px;
-  background-color: var(--el-color-primary-light-9);
-}
-
-.statistic-button {
-  height: 100%;
-  width: 100%;
-  padding: 20px;
-  border-radius: 4px;
-}
-</style>
