@@ -48,12 +48,14 @@ npm build
 
 ### 下载发布版本
 
-到 [release](https://github.com/yhf7952/WubiGame/releases) 页面下载最新版本，解压后在浏览器中打开 `index.html`，或部署至其他 web 服务器。
+到 [release](https://github.com/ZerolAcqua/wubi-game/releases) 页面下载最新版本，解压后在浏览器中打开 `index.html`，或部署至其他 web 服务器。
 
 ### 在线使用
 
-地址： https://wubigame.yantuz.cn/
+地址：https://vanblog.zerolacqua.top/c/wubi/
 
 ## 关注原作者
 
 网站： https://yantuz.cn
+原作者在线使用地址：https://wubigame.yantuz.cn/
+原作者发布版本：到 [release](https://github.com/yhf7952/WubiGame/releases) 页面下载最新版本，解压后在浏览器中打开 `index.html`，或部署至其他 web 服务器。

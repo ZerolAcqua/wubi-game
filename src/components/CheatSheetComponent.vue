@@ -22,7 +22,7 @@
   text-align: center;
 }
 .rootImg img {
-  max-width: 100%;
+  max-width: 60%;
 }
 </style>
 
