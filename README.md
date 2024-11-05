@@ -56,6 +56,6 @@ npm build
 
 ## 关注原作者
 
-原作者网站： https://yantuz.cn
-原作者在线使用地址：https://wubigame.yantuz.cn/
-原作者发布版本：[release](https://github.com/yhf7952/WubiGame/releases)
+- 原作者网站： https://yantuz.cn
+- 原作者在线使用地址：https://wubigame.yantuz.cn/
+- 原作者发布版本：[release](https://github.com/yhf7952/WubiGame/releases)
