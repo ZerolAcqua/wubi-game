@@ -34,7 +34,7 @@
           v-model="intext"
           id="intext"
           placeholder="光标置于此处开始"
-          @input="game($event)"
+          @input="onInput(str)"
           autofocus="autofocus"
           style="width: 150px"
         )
@@ -89,17 +89,18 @@ import { listRoot, listYi, strErRaw } from '@/data/code'
 const strEr = strErRaw.replace(/[\s\|]/g, '')
 const listEr = strEr.split('')
 
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, type Ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { store } from '@/store'
-import { GameMode } from '@/interface'
+import { GameMode, type Key } from '@/interface'
 
 // 文字卡片内容
-const d1 = ref('')
-const d2 = ref('')
-const d3 = ref('')
-const d4 = ref('')
-const d5 = ref('')
+const d1 = ref<string[]>()
+const d2 = ref<string[]>()
+const d3 = ref<string[]>()
+const d4 = ref<string[]>()
+const d5 = ref<string[]>()
+
 // 输入内容
 const intext = ref('')
 // 是否正确
@@ -132,19 +133,20 @@ watch(
 )
 
 function getData() {
-  d1.value = d2.value === '' ? getRandom() : d2.value
-  d2.value = d3.value === '' ? getRandom() : d3.value
-  d3.value = d4.value === '' ? getRandom() : d4.value
-  d4.value = d5.value === '' ? getRandom() : d5.value
+  d1.value = d2.value === undefined ? getRandom() : d2.value
+  d2.value = d3.value === undefined ? getRandom() : d3.value
+  d3.value = d4.value === undefined ? getRandom() : d4.value
+  d4.value = d5.value === undefined ? getRandom() : d5.value
   d5.value = getRandom()
 }
 
-const game = $event => {
-  const input = $event.toLowerCase()
+// input 事件
+function onInput(str: string) {
+  const input = str.toLowerCase()
   switch (props.gameMode) {
     case GameMode.zigen:
     case GameMode.yiji:
-      if (input === d1.value[0]) {
+      if (input === d1.value![0]) {
         getData()
         retryTimes.value = 0
         isRight.value = true
@@ -165,7 +167,7 @@ const game = $event => {
 
       return
     case GameMode.erji:
-      if (input === d1.value[1]) {
+      if (input === d1.value![1]) {
         getData()
         store.incrementRightTimes()
         isRight.value = true
@@ -182,11 +184,11 @@ const game = $event => {
 }
 
 function reset() {
-  d1.value = ''
-  d2.value = ''
-  d3.value = ''
-  d4.value = ''
-  d5.value = ''
+  d1.value = undefined
+  d2.value = undefined
+  d3.value = undefined
+  d4.value = undefined
+  d5.value = undefined
   getData()
   store.resetStatData()
 
@@ -194,7 +196,7 @@ function reset() {
   document.getElementById('intext')!.focus()
 }
 
-const getRandom = () => {
+function getRandom(): [string, string] {
   let thisList = listRoot
   switch (props.gameMode) {
     case GameMode.zigen:
@@ -209,8 +211,8 @@ const getRandom = () => {
 
   const keyList = Object.keys(thisList)
   const key = keyList[Math.floor(Math.random() * keyList.length)]
-  const values = thisList[key]
-  const value = values[Math.floor(Math.random() * values.length)]
+  const values = thisList[key as Key]
+  const value = values![Math.floor(Math.random() * values!.length)]
   return [key, value]
 }
 

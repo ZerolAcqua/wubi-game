@@ -1,5 +1,8 @@
+import type { Key } from "@/interface"
+
+
 // prettier-ignore
-export const listRoot = {
+export const listRoot: Partial<Record<Key, string[]>> = {
   g: ['一', '丁', '丅', '丄', '丂', '七'],
   f: ['丐', '丑', '专', '丒', '丕', '丘', '丙', '世', '丗', '且'],
   d: ['丠', '両', '两', '严', '並', '丢', '丣', '丨', '丩', '个', '丫', '丧'],
@@ -27,7 +30,7 @@ export const listRoot = {
   x: ['侓', '侔', '侕', '侖', '侗', '侒', '侐', '侑'],
 }
 
-export const listYi = {
+export const listYi: Partial<Record<Key, string[]>> = {
   g: ['一'],
   f: ['地'],
   d: ['在'],
